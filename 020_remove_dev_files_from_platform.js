@@ -8,6 +8,7 @@
 
 var fs = require('fs');
 var path = require('path');
+var mv = require('mv');
 
 /**
  * 删除指定目录下除了排除在外的所有文件和文件夹
@@ -47,12 +48,16 @@ var deleteFolderRecursive = function(removePath, excludePaths, excludeFiles) {
 var iosBaseDir = path.resolve(__dirname, "../../platforms/ios/www/");
 var androidBaseDir = path.resolve(__dirname, "../../platforms/android/assets/www/");
 var ionicSassDir = "/lib/ionic";
+var fontAwesomeDir = "/lib/font-awesome";
 var libDir = "/lib";
 var devJSDir = "/scripts";
 var devCSSDir = "/css";
 // lib 下 ionic的文件目录
 var iosIonicDir = iosBaseDir + ionicSassDir;
 var androidIonicDir = androidBaseDir + ionicSassDir;
+// lib 下 font-awesome的文件目录
+var iosFontAwesomeDir = iosBaseDir + fontAwesomeDir;
+var androidFontAwesomeDir = androidBaseDir + fontAwesomeDir;
 // lib
 var iosLibDir = iosBaseDir + libDir;
 var androidLibDir = androidBaseDir + libDir;
@@ -65,6 +70,12 @@ var androidDevCSSDir = androidBaseDir + devCSSDir;
 // assets 报表文件目录
 var iosAssetsDir = iosBaseDir + "/assets";
 var androidAssetsDir = androidBaseDir + "/assets";
+// img 目录
+var iosImgDir = iosBaseDir + "/img";
+var androidImgDir = androidBaseDir + "/img";
+// images 目录
+var iosImagesDir = iosBaseDir + "/images";
+var androidImagesDir = androidBaseDir + "/images";
 
 var cliCommand = process.env.CORDOVA_CMDLINE;
 var isCompress = (cliCommand.indexOf('--compress') > -1);
@@ -72,12 +83,24 @@ var isCompress = (cliCommand.indexOf('--compress') > -1);
 if(isCompress) {
     deleteFolderRecursive(iosIonicDir, ["fonts"], ["ionic.min.css", "ionic.bundle.min.js"]);
     deleteFolderRecursive(androidIonicDir, ["fonts"], ["ionic.min.css", "ionic.bundle.min.js"]);
-    deleteFolderRecursive(iosLibDir, ["ionic"], []);
-    deleteFolderRecursive(androidLibDir, ["ionic"], []);
+    deleteFolderRecursive(iosFontAwesomeDir, ["fonts"], ["font-awesome.min.css"]);
+    deleteFolderRecursive(androidFontAwesomeDir, ["fonts"], ["font-awesome.min.css"]);
+    deleteFolderRecursive(iosLibDir, ["ionic", "font-awesome"], []);
+    deleteFolderRecursive(androidLibDir, ["ionic", "font-awesome"], []);
     deleteFolderRecursive(iosDevJSDir, [], ["app.join.js", "vendor.js"]);
     deleteFolderRecursive(androidDevJSDir, [], ["app.join.js", "vendor.js"]);
     deleteFolderRecursive(iosDevCSSDir, [], ["app.css"]);
     deleteFolderRecursive(androidDevCSSDir, [], ["app.css"]);
     deleteFolderRecursive(iosAssetsDir, [], []);
     deleteFolderRecursive(androidAssetsDir, [], []);
+    deleteFolderRecursive(iosImgDir, [], []);
+    deleteFolderRecursive(androidImgDir, [], []);
+
+    // 将压缩过的images文件夹迁移到img
+    mv(iosImagesDir, iosImgDir, {mkdirp: true}, function(err) {
+        console.log(err);
+    });
+    mv(androidImgDir, androidImagesDir, {mkdirp: true}, function(err) {
+        console.log(err);
+    });
 }
