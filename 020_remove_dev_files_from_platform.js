@@ -70,12 +70,6 @@ var androidDevCSSDir = androidBaseDir + devCSSDir;
 // assets 报表文件目录
 var iosAssetsDir = iosBaseDir + "/assets";
 var androidAssetsDir = androidBaseDir + "/assets";
-// img 目录
-var iosImgDir = iosBaseDir + "/img";
-var androidImgDir = androidBaseDir + "/img";
-// images 目录
-var iosImagesDir = iosBaseDir + "/images";
-var androidImagesDir = androidBaseDir + "/images";
 
 var cliCommand = process.env.CORDOVA_CMDLINE;
 var isCompress = (cliCommand.indexOf('--compress') > -1);
@@ -93,14 +87,4 @@ if(isCompress) {
     deleteFolderRecursive(androidDevCSSDir, [], ["app.css"]);
     deleteFolderRecursive(iosAssetsDir, [], []);
     deleteFolderRecursive(androidAssetsDir, [], []);
-    deleteFolderRecursive(iosImgDir, [], []);
-    deleteFolderRecursive(androidImgDir, [], []);
-
-    // 将压缩过的images文件夹迁移到img
-    mv(iosImagesDir, iosImgDir, {mkdirp: true}, function(err) {
-        console.log(err);
-    });
-    mv(androidImgDir, androidImagesDir, {mkdirp: true}, function(err) {
-        console.log(err);
-    });
 }
