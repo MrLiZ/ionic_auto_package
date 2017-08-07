@@ -8,7 +8,6 @@
 
 var fs = require('fs');
 var path = require('path');
-var mv = require('mv');
 
 /**
  * 删除指定目录下除了排除在外的所有文件和文件夹
